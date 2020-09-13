@@ -68,7 +68,20 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  * Мой возраст. Для заданного 0 < n < 200, рассматриваемого как возраст человека,
  * вернуть строку вида: «21 год», «32 года», «12 лет».
  */
-fun ageDescription(age: Int): String = TODO()
+fun ageDescription(age: Int): String =
+    when {
+        age % 100 == 11 -> "$age лет"
+        age % 100 == 12 -> "$age лет"
+        age % 100 == 13 -> "$age лет"
+        age % 100 == 14 -> "$age лет"
+        age % 10 == 1 -> "$age год"
+        age % 10 == 2 -> "$age года"
+        age % 10 == 3 -> "$age года"
+        age % 10 == 4 -> "$age года"
+        else -> "$age лет"
+    }
+
+
 
 /**
  * Простая (2 балла)
@@ -81,7 +94,22 @@ fun timeForHalfWay(
     t1: Double, v1: Double,
     t2: Double, v2: Double,
     t3: Double, v3: Double
-): Double = TODO()
+): Double {
+    val s1 = v1 * t1
+    val s2 = v2 * t2
+    val s3 = v3 * t3
+    val halfWay = (s1 + s2 + s3) / 2
+    if (halfWay < s1)
+        return halfWay / v1
+    else if (halfWay == s1)
+        return t1
+    else if (halfWay > s1 && halfWay < s1 + s2)
+        return t1 + ((halfWay - s1) / v2)
+    else if (halfWay == s1 + s2)
+        return t1 + t2
+    else
+        return t1 + t2 + ((halfWay - s1 - s2) / v3)
+}
 
 /**
  * Простая (2 балла)
@@ -122,7 +150,29 @@ fun rookOrBishopThreatens(
  * прямоугольным (вернуть 1) или тупоугольным (вернуть 2).
  * Если такой треугольник не существует, вернуть -1.
  */
-fun triangleKind(a: Double, b: Double, c: Double): Int = TODO()
+fun triangleKind(a: Double, b: Double, c: Double): Int {
+    if (a + b <= c || a + c <= b || b + c <= a) return -1
+    else {
+        var max = a
+        var x1 = b
+        var x2 = c
+
+        if (b > max) {
+            max = b
+            x1 = a
+        }
+        if (c > max) {
+            max = c
+            x1 = a
+            x2 = b
+        }
+        val max2 = max * max
+        val sum = x1 * x1 + x2 * x2
+        if (sum > max2) return 0
+        else if (sum == max2) return 1
+        else return 2
+    }
+}
 
 /**
  * Средняя (3 балла)
@@ -133,3 +183,4 @@ fun triangleKind(a: Double, b: Double, c: Double): Int = TODO()
  * Если пересечения нет, вернуть -1.
  */
 fun segmentLength(a: Int, b: Int, c: Int, d: Int): Int = TODO()
+
