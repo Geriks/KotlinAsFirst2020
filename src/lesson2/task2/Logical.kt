@@ -3,6 +3,7 @@
 package lesson2.task2
 
 import lesson1.task1.sqr
+import kotlin.math.min
 
 /**
  * Пример
@@ -45,19 +46,17 @@ fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean = TODO()
  * Вернуть число дней в этом месяце этого года по григорианскому календарю.
  */
 fun daysInMonth(month: Int, year: Int): Int {
-    var days = 0
-    if (year % 4 == 0 && year % 100 != 0 || year % 400 == 0) {
-        if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12)
-            days = 31
-        else if (month == 4 || month == 6 || month == 9 || month == 11)
-            days = 30
-        else days = 29
-    } else {
-        if (month == 1 || month == 3 || month == 5 || month == 7 || month == 8 || month == 10 || month == 12)
-            days = 31
-        else if (month == 4 || month == 6 || month == 9 || month == 11)
-            days = 30
-        else days = 28
+    val days: Int
+    if (year % 4 == 0 && year % 100 != 0 || year % 400 == 0)
+        days = when (month) {
+            1, 3, 5, 7, 8, 10, 12 -> 31
+            4, 6, 9, 11 -> 30
+            else -> 29
+        }
+    else days = when (month) {
+        1, 3, 5, 7, 8, 10, 12 -> 31
+        4, 6, 9, 11 -> 30
+        else -> 28
     }
     return days
 }
@@ -86,6 +85,10 @@ fun circleInside(
  */
 fun brickPasses(a: Int, b: Int, c: Int, r: Int, s: Int): Boolean {
     var passed = false
-    if (r >= a && s >= b || r >= b && s >= a || r >= c && s >= b || r >= b && s >= c || r >= c && s >= a) passed = true
+    val minBreakSide = minOf(a, b, c)
+    val averageBreakSide = (a + b + c) - minBreakSide - maxOf(a, b, c)
+    val minHoleSide = minOf(s, r)
+    val maxHoleSide = maxOf(s, r)
+    if (minHoleSide >= minBreakSide && maxHoleSide >= averageBreakSide) passed = true
     return passed
 }

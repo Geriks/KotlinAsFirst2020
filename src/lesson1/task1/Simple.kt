@@ -92,7 +92,7 @@ fun lengthInMeters(sagenes: Int, arshins: Int, vershoks: Int): Double {
  * Вывести значение того же угла в радианах (например, 0.63256).
  */
 fun angleInRadian(deg: Int, min: Int, sec: Int): Double {
-    val x1 = (deg + (min + sec / 60) / 60)
+    val x1 = (deg + min / 60.0 + sec / 3600.0)
     return (x1 * PI) / 180
 }
 
@@ -119,11 +119,9 @@ fun thirdDigit(number: Int): Int = number / 100 % 10
  * прибыл на станцию назначения в h2 часов m2 минут того же дня (например в 13:01).
  * Определите время поезда в пути в минутах (в данном случае 216).
  */
-fun travelMinutes(hoursDepart: Int, minutesDepart: Int, hoursArrive: Int, minutesArrive: Int): Int {
-    val x1 = hoursArrive - hoursDepart
-    val x2 = minutesArrive - minutesDepart
-    return x1 * 60 + x2
-}
+fun travelMinutes(hoursDepart: Int, minutesDepart: Int, hoursArrive: Int, minutesArrive: Int): Int =
+    (hoursArrive - hoursDepart) * 60 + minutesArrive - minutesDepart
+
 
 /**
  * Простая (2 балла)

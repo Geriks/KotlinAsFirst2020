@@ -68,19 +68,16 @@ fun minBiRoot(a: Double, b: Double, c: Double): Double {
  * Мой возраст. Для заданного 0 < n < 200, рассматриваемого как возраст человека,
  * вернуть строку вида: «21 год», «32 года», «12 лет».
  */
-fun ageDescription(age: Int): String =
-    when {
-        age % 100 == 11 -> "$age лет"
-        age % 100 == 12 -> "$age лет"
-        age % 100 == 13 -> "$age лет"
-        age % 100 == 14 -> "$age лет"
+fun ageDescription(age: Int): String {
+    if (age % 100 in 11..14) return "$age лет"
+    return when {
         age % 10 == 1 -> "$age год"
         age % 10 == 2 -> "$age года"
         age % 10 == 3 -> "$age года"
         age % 10 == 4 -> "$age года"
         else -> "$age лет"
     }
-
+}
 
 
 /**
@@ -99,16 +96,13 @@ fun timeForHalfWay(
     val s2 = v2 * t2
     val s3 = v3 * t3
     val halfWay = (s1 + s2 + s3) / 2
-    if (halfWay < s1)
-        return halfWay / v1
-    else if (halfWay == s1)
-        return t1
-    else if (halfWay > s1 && halfWay < s1 + s2)
-        return t1 + ((halfWay - s1) / v2)
-    else if (halfWay == s1 + s2)
-        return t1 + t2
-    else
-        return t1 + t2 + ((halfWay - s1 - s2) / v3)
+    return when {
+        halfWay < s1 -> halfWay / v1
+        halfWay == s1 -> t1
+        halfWay > s1 && halfWay < s1 + s2 -> t1 + ((halfWay - s1) / v2)
+        halfWay == s1 + s2 -> t1 + t2
+        else -> t1 + t2 + ((halfWay - s1 - s2) / v3)
+    }
 }
 
 /**
@@ -151,26 +145,18 @@ fun rookOrBishopThreatens(
  * Если такой треугольник не существует, вернуть -1.
  */
 fun triangleKind(a: Double, b: Double, c: Double): Int {
-    if (a + b <= c || a + c <= b || b + c <= a) return -1
+    return if (a + b <= c || a + c <= b || b + c <= a) -1
     else {
-        var max = a
-        var x1 = b
-        var x2 = c
-
-        if (b > max) {
-            max = b
-            x1 = a
-        }
-        if (c > max) {
-            max = c
-            x1 = a
-            x2 = b
-        }
+        val max = maxOf(a, b, c)
+        val min = minOf(a, b, c)
+        val average = a + b + c - min - max
         val max2 = max * max
-        val sum = x1 * x1 + x2 * x2
-        if (sum > max2) return 0
-        else if (sum == max2) return 1
-        else return 2
+        val sum = min * min + average * average
+        return when {
+            sum > max2 -> 0
+            sum == max2 -> 1
+            else -> 2
+        }
     }
 }
 
