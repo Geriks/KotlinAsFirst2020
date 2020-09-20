@@ -66,9 +66,9 @@ fun main() {
  * Рассчитать время в секундах, прошедшее с начала суток (30035 в данном случае).
  */
 fun seconds(hours: Int, minutes: Int, seconds: Int): Int {
-    val x1 = (hours * 3600) //час в секунды
-    val x2 = (minutes * 60) // минуты в секунды
-    return x1 + x2 + seconds // sum sec
+    val htoS = (hours * 3600) //час в секунды
+    val mtoS = (minutes * 60) // минуты в секунды
+    return htoS + mtoS + seconds // sum sec
 }
 
 /**
@@ -79,10 +79,10 @@ fun seconds(hours: Int, minutes: Int, seconds: Int): Int {
  * 1 сажень = 3 аршина = 48 вершков, 1 вершок = 4.445 см.
  */
 fun lengthInMeters(sagenes: Int, arshins: Int, vershoks: Int): Double {
-    val x1 = (sagenes * 48) // свж в вершк
-    val x2 = (arshins * 16) // арш в вершк
-    val x3 = ((x1 + x2 + vershoks) * 4.445)
-    return x3 / 100
+    val stoV = (sagenes * 48) // свж в вершк
+    val atoV = (arshins * 16) // арш в вершк
+    val metres = ((stoV + atoV + vershoks) * 4.445)
+    return metres / 100
 }
 
 /**

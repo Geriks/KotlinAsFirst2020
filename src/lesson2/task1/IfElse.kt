@@ -72,9 +72,7 @@ fun ageDescription(age: Int): String {
     if (age % 100 in 11..14) return "$age лет"
     return when {
         age % 10 == 1 -> "$age год"
-        age % 10 == 2 -> "$age года"
-        age % 10 == 3 -> "$age года"
-        age % 10 == 4 -> "$age года"
+        age % 10 in 2..4 -> "$age года"
         else -> "$age лет"
     }
 }
@@ -97,10 +95,8 @@ fun timeForHalfWay(
     val s3 = v3 * t3
     val halfWay = (s1 + s2 + s3) / 2
     return when {
-        halfWay < s1 -> halfWay / v1
-        halfWay == s1 -> t1
-        halfWay > s1 && halfWay < s1 + s2 -> t1 + ((halfWay - s1) / v2)
-        halfWay == s1 + s2 -> t1 + t2
+        halfWay <= s1 -> halfWay / v1
+        halfWay >= s1 && halfWay <= s1 + s2 -> t1 + ((halfWay - s1) / v2)
         else -> t1 + t2 + ((halfWay - s1 - s2) / v3)
     }
 }
@@ -145,11 +141,11 @@ fun rookOrBishopThreatens(
  * Если такой треугольник не существует, вернуть -1.
  */
 fun triangleKind(a: Double, b: Double, c: Double): Int {
-    return if (a + b <= c || a + c <= b || b + c <= a) -1
+    val max = maxOf(a, b, c)
+    val min = minOf(a, b, c)
+    val average = a + b + c - min - max
+    return if (min + average <= max) -1
     else {
-        val max = maxOf(a, b, c)
-        val min = minOf(a, b, c)
-        val average = a + b + c - min - max
         val max2 = max * max
         val sum = min * min + average * average
         return when {
