@@ -144,15 +144,13 @@ fun triangleKind(a: Double, b: Double, c: Double): Int {
     val max = maxOf(a, b, c)
     val min = minOf(a, b, c)
     val average = a + b + c - min - max
-    return if (min + average <= max) -1
-    else {
-        val max2 = max * max
-        val sum = min * min + average * average
-        return when {
-            sum > max2 -> 0
-            sum == max2 -> 1
-            else -> 2
-        }
+    if (min + average <= max) return -1
+    val max2 = max * max
+    val sum = min * min + average * average
+    return when {
+        sum > max2 -> 0
+        sum == max2 -> 1
+        else -> 2
     }
 }
 

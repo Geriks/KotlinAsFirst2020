@@ -92,8 +92,8 @@ fun lengthInMeters(sagenes: Int, arshins: Int, vershoks: Int): Double {
  * Вывести значение того же угла в радианах (например, 0.63256).
  */
 fun angleInRadian(deg: Int, min: Int, sec: Int): Double {
-    val x1 = (deg + min / 60.0 + sec / 3600.0)
-    return (x1 * PI) / 180
+    val angle = (deg + min / 60.0 + sec / 3600.0)
+    return (angle * PI) / 180
 }
 
 /**
@@ -140,8 +140,8 @@ fun accountInThreeYears(initial: Int, percent: Int): Double = TODO()
  * Необходимо вывести число, полученное из заданного перестановкой цифр в обратном порядке (например, 874).
  */
 fun numberRevert(number: Int): Int {
-    val x1 = number % 10
-    val x2 = number / 10 % 10
-    val x3 = number / 100
-    return x1 * 100 + x2 * 10 + x3
+    val hundreds = number % 10
+    val decades = number / 10 % 10
+    val units = number / 100
+    return hundreds * 100 + decades * 10 + units
 }

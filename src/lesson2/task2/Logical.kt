@@ -3,7 +3,6 @@
 package lesson2.task2
 
 import lesson1.task1.sqr
-import kotlin.math.min
 
 /**
  * Пример
@@ -20,12 +19,12 @@ fun pointInsideCircle(x: Double, y: Double, x0: Double, y0: Double, r: Double) =
  * Определить, счастливое ли заданное число, вернуть true, если это так.
  */
 fun isNumberHappy(number: Int): Boolean {
-    val x1 = number / 1000
-    val x2 = number / 100 % 10
-    val x3 = number % 100 / 10
-    val x4 = number % 10
+    val thousands = number / 1000
+    val hundreds = number / 100 % 10
+    val decades = number % 100 / 10
+    val units = number % 10
     var res = false
-    if (x1 + x2 == x3 + x4) res = true
+    if (thousands + hundreds == decades + units) res = true
     return res
 }
 
@@ -46,19 +45,17 @@ fun queenThreatens(x1: Int, y1: Int, x2: Int, y2: Int): Boolean = TODO()
  * Вернуть число дней в этом месяце этого года по григорианскому календарю.
  */
 fun daysInMonth(month: Int, year: Int): Int {
-    val days: Int
-    if (year % 400 == 0 || year % 4 == 0 && year % 100 != 0)
-        days = when (month) {
+    return if (year % 400 == 0 || year % 4 == 0 && year % 100 != 0)
+        when (month) {
             1, 3, 5, 7, 8, 10, 12 -> 31
             4, 6, 9, 11 -> 30
             else -> 29
         }
-    else days = when (month) {
+    else when (month) {
         1, 3, 5, 7, 8, 10, 12 -> 31
         4, 6, 9, 11 -> 30
         else -> 28
     }
-    return days
 }
 
 
