@@ -76,14 +76,14 @@ fun digitCountInNumber(n: Int, m: Int): Int =
  */
 fun digitNumber(n: Int): Int {
     var count = 0
-    var k = n
+    var k = abs(n)
     for (i in 1..k) {
         while (k > 0) {
             count++
             k /= 10
         }
     }
-    if (count == 0) count++
+    if (count == 0) return 1
     return count
 }
 
@@ -94,21 +94,17 @@ fun digitNumber(n: Int): Int {
  * Ряд Фибоначчи определён следующим образом: fib(1) = 1, fib(2) = 1, fib(n+2) = fib(n) + fib(n+1)
  */
 fun fib(n: Int): Int {
-    var f = 0
+    var f = 1
     var f0 = 0
     var f1 = 1
     var i = 2
-    while (i < n + 1) {
+    for (j in 1 until n) {
         f = f0 + f1
         f0 = f1
         f1 = f
         i++
     }
-    return when (n) {
-        0 -> 0
-        1 -> 1
-        else -> f
-    }
+    return f
 }
 
 /**
@@ -117,9 +113,10 @@ fun fib(n: Int): Int {
  * Для заданного числа n > 1 найти минимальный делитель, превышающий 1
  */
 fun minDivisor(n: Int): Int {
-    var minDivider = 2
-    while (n % minDivider != 0) minDivider++
-    return minDivider
+    for (i in 2..sqrt(n.toDouble()).toInt())
+        if (n % i == 0)
+            return i
+    return n
 }
 
 /**
@@ -164,20 +161,19 @@ fun collatzSteps(x: Int): Int {
  * минимальное число k, которое делится и на m и на n без остатка
  */
 fun lcm(m: Int, n: Int): Int {
-    var nod = 0
-    if (m == n) nod = m
+    var gcd = 0
     var a = m
     var b = n
     while (a != 0 && b != 0) {
         if (a > b) {
             a %= b
-            nod = a + b
+            gcd = a + b
         } else {
             b %= a
-            nod = a + b
+            gcd = a + b
         }
     }
-    return m * n / nod
+    return m / gcd * n
 }
 
 /**
@@ -188,22 +184,8 @@ fun lcm(m: Int, n: Int): Int {
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
 fun isCoPrime(m: Int, n: Int): Boolean {
-    var nod = 1
-    var a = m
-    var b = n
-    while (a != 0 && b != 0) {
-        if (a > b) {
-            a %= b
-            nod = a + b
-        } else {
-            b %= a
-            nod = a + b
-        }
-    }
-    return when (nod) {
-        1 -> true
-        else -> false
-    }
+    val ans = m * n / lcm(m, n)
+    return ans == 1
 }
 
 /**
@@ -241,26 +223,8 @@ fun revert(n: Int): Int {
  *
  * Использовать операции со строками в этой задаче запрещается.
  */
-fun isPalindrome(n: Int): Boolean {
-    var ans = false
-    var x = n
-    var revert = 0
-    while (x != 0) {
-        revert = revert * 10 + x % 10
-        x /= 10
-    }
-    var normal = n
-    var first = revert % 10
-    var last = normal % 10
-    while (first == last && (first != 0 || last != 0)) {
-        normal /= 10
-        revert /= 10
-        first = revert % 10
-        last = normal % 10
-    }
-    if (first == last) ans = true
-    return ans
-}
+fun isPalindrome(n: Int) = n == revert(n)
+
 
 /**
  * Средняя (3 балла)
@@ -277,8 +241,7 @@ fun hasDifferentDigits(n: Int): Boolean {
     while (x != 0) {
         if (check == x % 10) ans = false
         else {
-            ans = true
-            break
+            return true
         }
         check = x % 10
         x /= 10

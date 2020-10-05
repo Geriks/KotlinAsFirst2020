@@ -293,12 +293,13 @@ fun convertToString(n: Int, base: Int): String = TODO()
  */
 fun decimal(digits: List<Int>, base: Int): Int {
     var sum = digits.last()
-    val counter = 0
+    var counter = 0
     var sepang = base
     for (i in 1 until digits.size - 1) sepang *= base
-    if (digits.size == 1) return 1
-    for (i in 1..digits.size) {
+    if (digits.size == 1) return digits[0]
+    for (i in 1 until digits.size) {
         sum += digits[counter] * sepang
+        counter++
         sepang /= base
     }
     return sum
