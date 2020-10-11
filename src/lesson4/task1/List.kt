@@ -127,8 +127,7 @@ fun abs(v: List<Double>): Double {
         abs += sqr(v[n])
     }
     abs = sqrt(abs)
-    return if (abs == 0.0) 0.0
-    else return abs
+    return abs
 }
 
 /**
@@ -137,8 +136,8 @@ fun abs(v: List<Double>): Double {
  * Рассчитать среднее арифметическое элементов списка list. Вернуть 0.0, если список пуст
  */
 fun mean(list: List<Double>): Double {
-    return if (list.sum() == 0.0) 0.0
-    else return list.sum() / list.size
+    return if (list.isEmpty()) 0.0
+    else list.sum() / list.size
 }
 
 /**
@@ -160,7 +159,7 @@ fun center(list: MutableList<Double>): MutableList<Double> = TODO()
  */
 fun times(a: List<Int>, b: List<Int>): Int {
     var result = 0
-    for ((elNumber) in (1..a.size).withIndex()) {
+    for (elNumber in a.indices) {
         result += a[elNumber] * b[elNumber]
     }
     return result
@@ -175,14 +174,12 @@ fun times(a: List<Int>, b: List<Int>): Int {
  * Значение пустого многочлена равно 0 при любом x.
  */
 fun polynom(p: List<Int>, x: Int): Int {
-    var elNumber = 1
     if (p.isEmpty()) return 0
     var result = p[0]
     var xN = x
-    for (i in 1 until p.size) {
+    for (elNumber in 1 until p.size) {
         result += p[elNumber] * xN
         xN *= x
-        elNumber++
     }
     return result
 }
@@ -198,13 +195,11 @@ fun polynom(p: List<Int>, x: Int): Int {
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
 fun accumulate(list: MutableList<Int>): MutableList<Int> {
-    var elNumber = 1
     if (list.isEmpty()) return list
     var sum = list[0]
-    for (i in 1 until list.size) {
+    for (elNumber in 1 until list.size) {
         list[elNumber] += sum
         sum = list[elNumber]
-        elNumber++
     }
     return list
 }
@@ -237,21 +232,7 @@ fun factorize(n: Int): List<Int> {
  * Результат разложения вернуть в виде строки, например 75 -> 3*5*5
  * Множители в результирующей строке должны располагаться по возрастанию.
  */
-fun factorizeToString(n: Int): String {
-    var divider = 2
-    var number = n
-    val res: String
-    val list: MutableList<Int> = mutableListOf()
-    while (number != 1) {
-        if (number % divider == 0) {
-            list.add(divider)
-            number /= divider
-            divider = 2
-        } else divider++
-    }
-    res = list.joinToString(separator = "*")
-    return res
-}
+fun factorizeToString(n: Int): String = factorize(n).joinToString(separator = "*")
 
 
 /**
@@ -264,6 +245,7 @@ fun factorizeToString(n: Int): String {
 fun convert(n: Int, base: Int): List<Int> {
     var number = n
     val list: MutableList<Int> = mutableListOf()
+    if (n == 0) list.add(0)
     while (number >= 1) {
         list.add(0, number % base)
         number /= base
@@ -293,14 +275,12 @@ fun convertToString(n: Int, base: Int): String = TODO()
  */
 fun decimal(digits: List<Int>, base: Int): Int {
     var sum = digits.last()
-    var counter = 0
-    var sepang = base
-    for (i in 1 until digits.size - 1) sepang *= base
+    var basis = base
+    for (i in 1 until digits.size - 1) basis *= base
     if (digits.size == 1) return digits[0]
-    for (i in 1 until digits.size) {
-        sum += digits[counter] * sepang
-        counter++
-        sepang /= base
+    for ((counter) in (1 until digits.size).withIndex()) {
+        sum += digits[counter] * basis
+        basis /= base
     }
     return sum
 }
