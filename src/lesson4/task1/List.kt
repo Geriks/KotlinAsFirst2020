@@ -4,6 +4,7 @@ package lesson4.task1
 
 import lesson1.task1.discriminant
 import lesson1.task1.sqr
+import java.lang.StringBuilder
 import kotlin.math.sqrt
 
 // Урок 4: списки
@@ -123,9 +124,7 @@ fun buildSumExample(list: List<Int>) = list.joinToString(separator = " + ", post
  */
 fun abs(v: List<Double>): Double {
     var abs = 0.0
-    for ((n) in v.withIndex()) {
-        abs += sqr(v[n])
-    }
+    v.forEach { abs += (sqr(it)) }
     abs = sqrt(abs)
     return abs
 }
@@ -174,11 +173,10 @@ fun times(a: List<Int>, b: List<Int>): Int {
  * Значение пустого многочлена равно 0 при любом x.
  */
 fun polynom(p: List<Int>, x: Int): Int {
-    if (p.isEmpty()) return 0
-    var result = p[0]
-    var xN = x
-    for (elNumber in 1 until p.size) {
-        result += p[elNumber] * xN
+    var result = 0
+    var xN = 1
+    for (element in p) {
+        result += element * xN
         xN *= x
     }
     return result
@@ -195,9 +193,8 @@ fun polynom(p: List<Int>, x: Int): Int {
  * Обратите внимание, что данная функция должна изменять содержание списка list, а не его копии.
  */
 fun accumulate(list: MutableList<Int>): MutableList<Int> {
-    if (list.isEmpty()) return list
-    var sum = list[0]
-    for (elNumber in 1 until list.size) {
+    var sum = 0
+    for (elNumber in 0 until list.size) {
         list[elNumber] += sum
         sum = list[elNumber]
     }
@@ -245,11 +242,11 @@ fun factorizeToString(n: Int): String = factorize(n).joinToString(separator = "*
 fun convert(n: Int, base: Int): List<Int> {
     var number = n
     val list: MutableList<Int> = mutableListOf()
-    if (n == 0) list.add(0)
     while (number >= 1) {
         list.add(0, number % base)
         number /= base
     }
+    if (list.isEmpty()) list.add(0)
     return list
 }
 
@@ -278,7 +275,7 @@ fun decimal(digits: List<Int>, base: Int): Int {
     var basis = base
     for (i in 1 until digits.size - 1) basis *= base
     if (digits.size == 1) return digits[0]
-    for ((counter) in (1 until digits.size).withIndex()) {
+    for (counter in 0..digits.size - 2) {
         sum += digits[counter] * basis
         basis /= base
     }
@@ -307,7 +304,19 @@ fun decimalFromString(str: String, base: Int): Int = TODO()
  * 90 = XC, 100 = C, 400 = CD, 500 = D, 900 = CM, 1000 = M.
  * Например: 23 = XXIII, 44 = XLIV, 100 = C
  */
-fun roman(n: Int): String = TODO()
+fun roman(n: Int): String {
+    val number = listOf(1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1)
+    val romNumber = listOf("M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I")
+    var num = n
+    var i = 0
+    val res = StringBuilder()
+    while (num > 0)
+        if (num >= number[i]) {
+            res.append(romNumber[i])
+            num -= number[i]
+        } else i++
+    return res.toString()
+}
 
 /**
  * Очень сложная (7 баллов)

@@ -2,6 +2,9 @@
 
 package lesson6.task1
 
+import lesson2.task2.daysInMonth
+import kotlin.math.max
+
 // Урок 6: разбор строк, исключения
 // Максимальное количество баллов = 13
 // Рекомендуемое количество баллов = 11
@@ -74,7 +77,21 @@ fun main() {
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30.02.2009) считается неверными
  * входными данными.
  */
-fun dateStrToDigit(str: String): String = TODO()
+val months = listOf(
+    "января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа",
+    "сентября", "октября", "ноября", "декабря"
+)
+
+fun dateStrToDigit(str: String): String {
+    val check = str.split(" ")
+    if (check.size != 3) return ""
+    val index = months.indexOf(check[1])
+    val day = check[0].toIntOrNull()
+    val month = if (index != -1) index + 1 else return ""
+    val year = check[2].toIntOrNull()
+    if (day == null || day < 1 || day > daysInMonth(month, year) || year == null || year < 0) return ""
+    return "%02d.%02d.%d".format(day, month, year)
+}
 
 /**
  * Средняя (4 балла)
@@ -86,7 +103,18 @@ fun dateStrToDigit(str: String): String = TODO()
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30 февраля 2009) считается неверными
  * входными данными.
  */
-fun dateDigitToStr(digital: String): String = TODO()
+fun dateDigitToStr(digital: String): String {
+    val check = digital.split(".")
+    if (check.size != 3) return ""
+    val day = check[0].toIntOrNull()
+    val month = check[1].toIntOrNull()
+    val year = check[2].toIntOrNull()
+    if (day == null || day < 1 || day > daysInMonth(month, year) ||
+        year == null || year < 0 ||
+        month == null || month !in 1..12
+    ) return ""
+    return "$day ${months[month - 1]} $year"
+}
 
 /**
  * Средняя (4 балла)
@@ -114,7 +142,16 @@ fun flattenPhoneNumber(phone: String): String = TODO()
  * Прочитать строку и вернуть максимальное присутствующее в ней число (717 в примере).
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
-fun bestLongJump(jumps: String): Int = TODO()
+fun bestLongJump(jumps: String): Int {
+    val check = jumps.split(" ")
+    var maxJump = -1
+    for (str in check) {
+        val isItInt = str.toIntOrNull() is Int
+        if (!isItInt && str !in setOf("-", "%")) return -1
+        if (isItInt) maxJump = max(str.toInt(), maxJump)
+    }
+    return maxJump
+}
 
 /**
  * Сложная (6 баллов)
@@ -127,7 +164,16 @@ fun bestLongJump(jumps: String): Int = TODO()
  * При нарушении формата входной строки, а также в случае отсутствия удачных попыток,
  * вернуть -1.
  */
-fun bestHighJump(jumps: String): Int = TODO()
+fun bestHighJump(jumps: String): Int {
+    val check = jumps.split(" ")
+    var maxJump = -1
+    if (check.size % 2 != 0) return -1
+    for (str in check.indices step 2) {
+        val res = check[str].toIntOrNull() ?: return -1
+        if ("+" in check[str + 1]) maxJump = max(maxJump, res)
+    }
+    return maxJump
+}
 
 /**
  * Сложная (6 баллов)
@@ -149,7 +195,15 @@ fun plusMinus(expression: String): Int = TODO()
  * Вернуть индекс начала первого повторяющегося слова, или -1, если повторов нет.
  * Пример: "Он пошёл в в школу" => результат 9 (индекс первого 'в')
  */
-fun firstDuplicateIndex(str: String): Int = TODO()
+fun firstDuplicateIndex(str: String): Int {
+    val list = str.split(" ")
+    var index = 0
+    for ((first, second) in list.zipWithNext()) {
+        if (first.toLowerCase() == second.toLowerCase()) return index
+        index += first.length + 1
+    }
+    return -1
+}
 
 /**
  * Сложная (6 баллов)
