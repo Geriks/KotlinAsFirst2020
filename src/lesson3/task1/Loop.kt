@@ -4,6 +4,7 @@ package lesson3.task1
 
 import kotlin.math.PI
 import kotlin.math.abs
+import kotlin.math.max
 import kotlin.math.sqrt
 
 // Урок 3: циклы
@@ -77,11 +78,10 @@ fun digitCountInNumber(n: Int, m: Int): Int =
 fun digitNumber(n: Int): Int {
     var count = 0
     var k = abs(n)
-    while (k > 0) {
+    do {
         count++
         k /= 10
-    }
-    if (count == 0) return 1
+    } while (k > 0)
     return count
 }
 
@@ -158,21 +158,14 @@ fun collatzSteps(x: Int): Int {
  * Для заданных чисел m и n найти наименьшее общее кратное, то есть,
  * минимальное число k, которое делится и на m и на n без остатка
  */
-fun lcm(m: Int, n: Int): Int {
-    var gcd = 0
+fun lowCommon (m: Int, n: Int): Int {
     var a = m
     var b = n
-    while (a != 0 && b != 0) {
-        if (a > b) {
-            a %= b
-            gcd = a + b
-        } else {
-            b %= a
-            gcd = a + b
-        }
-    }
-    return m / gcd * n
+    while (a != 0 && b != 0)
+        if (a <= b) b %= a else a %= b
+    return max(a, b)
 }
+fun lcm(m: Int, n: Int): Int = m / lowCommon(m, n) * n
 
 /**
  * Средняя (3 балла)
@@ -181,11 +174,7 @@ fun lcm(m: Int, n: Int): Int {
  * Взаимно простые числа не имеют общих делителей, кроме 1.
  * Например, 25 и 49 взаимно простые, а 6 и 8 -- нет.
  */
-fun isCoPrime(m: Int, n: Int): Boolean {
-    val ans = m * n / lcm(m, n)
-    return ans == 1
-}
-
+fun isCoPrime(m: Int, n: Int): Boolean = lowCommon(m, n) == 1
 /**
  * Средняя (3 балла)
  *

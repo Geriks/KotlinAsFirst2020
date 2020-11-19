@@ -77,19 +77,18 @@ fun main() {
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30.02.2009) считается неверными
  * входными данными.
  */
-val months = listOf(
-    "января", "февраля", "марта", "апреля", "мая", "июня", "июля", "августа",
-    "сентября", "октября", "ноября", "декабря"
+val months1 = mapOf(
+    "января" to 1, "февраля" to 2, "марта" to 3, "апреля" to 4, "мая" to 5, "июня" to 6, "июля" to 7, "августа" to 8,
+    "сентября" to 9, "октября" to 10, "ноября" to 11, "декабря" to 12
 )
 
 fun dateStrToDigit(str: String): String {
     val check = str.split(" ")
     if (check.size != 3) return ""
-    val index = months.indexOf(check[1])
     val day = check[0].toIntOrNull()
-    val month = if (index != -1) index + 1 else return ""
+    val month = months1[check[1]]
     val year = check[2].toIntOrNull()
-    if (day == null || day < 1 || day > daysInMonth(month, year) || year == null || year < 0) return ""
+    if (day == null || day < 1 || day > daysInMonth(month, year) || year == null || year < 0 || month == null) return ""
     return "%02d.%02d.%d".format(day, month, year)
 }
 
@@ -103,6 +102,12 @@ fun dateStrToDigit(str: String): String {
  * Обратите внимание: некорректная с точки зрения календаря дата (например, 30 февраля 2009) считается неверными
  * входными данными.
  */
+val months = mapOf(
+    1 to "января", 2 to "февраля", 3 to "марта",4 to "апреля",
+    5 to "мая", 6 to "июня", 7 to "июля", 8 to "августа",
+    9 to "сентября", 10 to "октября", 11 to "ноября", 12 to "декабря"
+)
+
 fun dateDigitToStr(digital: String): String {
     val check = digital.split(".")
     if (check.size != 3) return ""
@@ -113,7 +118,7 @@ fun dateDigitToStr(digital: String): String {
         year == null || year < 0 ||
         month == null || month !in 1..12
     ) return ""
-    return "$day ${months[month - 1]} $year"
+    return "$day ${months[month]} $year"
 }
 
 /**
@@ -142,12 +147,14 @@ fun flattenPhoneNumber(phone: String): String = TODO()
  * Прочитать строку и вернуть максимальное присутствующее в ней число (717 в примере).
  * При нарушении формата входной строки или при отсутствии в ней чисел, вернуть -1.
  */
+val allowed = setOf("-", "%")
+
 fun bestLongJump(jumps: String): Int {
     val check = jumps.split(" ")
     var maxJump = -1
     for (str in check) {
         val isItInt = str.toIntOrNull() is Int
-        if (!isItInt && str !in setOf("-", "%")) return -1
+        if (!isItInt && str !in allowed) return -1
         if (isItInt) maxJump = max(str.toInt(), maxJump)
     }
     return maxJump

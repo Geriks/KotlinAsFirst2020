@@ -122,12 +122,7 @@ fun buildSumExample(list: List<Int>) = list.joinToString(separator = " + ", post
  * по формуле abs = sqrt(a1^2 + a2^2 + ... + aN^2).
  * Модуль пустого вектора считать равным 0.0.
  */
-fun abs(v: List<Double>): Double {
-    var abs = 0.0
-    v.forEach { abs += (sqr(it)) }
-    abs = sqrt(abs)
-    return abs
-}
+fun abs(v: List<Double>): Double = sqrt(v.map { it * it }.sum())
 
 /**
  * Простая (2 балла)
@@ -241,12 +236,11 @@ fun factorizeToString(n: Int): String = factorize(n).joinToString(separator = "*
  */
 fun convert(n: Int, base: Int): List<Int> {
     var number = n
-    val list: MutableList<Int> = mutableListOf()
-    while (number >= 1) {
+    val list = mutableListOf<Int>()
+    do {
         list.add(0, number % base)
         number /= base
-    }
-    if (list.isEmpty()) list.add(0)
+    } while (number > 0)
     return list
 }
 
@@ -271,15 +265,13 @@ fun convertToString(n: Int, base: Int): String = TODO()
  * Например: digits = (1, 3, 12), base = 14 -> 250
  */
 fun decimal(digits: List<Int>, base: Int): Int {
-    var sum = digits.last()
-    var basis = base
-    for (i in 1 until digits.size - 1) basis *= base
-    if (digits.size == 1) return digits[0]
-    for (counter in 0..digits.size - 2) {
-        sum += digits[counter] * basis
-        basis /= base
+    var res = 0
+    var n = 1
+    for (i in digits.size - 1 downTo 0) {
+        res += digits[i] * n
+        n *= base
     }
-    return sum
+    return res
 }
 
 /**

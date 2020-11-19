@@ -2,7 +2,6 @@
 
 package lesson5.task1
 
-import ru.spbstu.wheels.intersperse
 
 // Урок 5: ассоциативные массивы и множества
 // Максимальное количество баллов = 14
@@ -302,10 +301,10 @@ fun propagateHandshakes(friends: Map<String, Set<String>>): Map<String, Set<Stri
  *   findSumOfTwo(listOf(1, 2, 3), 6) -> Pair(-1, -1)
  */
 fun findSumOfTwo(list: List<Int>, number: Int): Pair<Int, Int> {
-    val res = mutableListOf<Int>()
+    val res = mutableMapOf<Int,Int>()
     for (i in list.indices) {
-        if (list[i] in res) return (res.indexOf(list[i]) to i) else
-            res.add(number - list[i])
+        if (list[i] in res.keys) return (res[list[i]]!! to i) else
+            res[number - list[i]] = i
     }
     return -1 to -1
 }

@@ -126,7 +126,6 @@ fun centerFile(inputName: String, outputName: String) {
             val currentLineLength = line.length
             val res = String.format("%${(currentLineLength + maxLength) / 2}s", line) + "\n"
             it.write(res)
-            print(res)
         }
     }
 }
