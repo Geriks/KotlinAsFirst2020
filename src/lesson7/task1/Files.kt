@@ -2,6 +2,7 @@
 
 package lesson7.task1
 
+import lesson2.task1.whichRookThreatens
 import java.io.File
 import kotlin.math.max
 
@@ -158,7 +159,28 @@ fun centerFile(inputName: String, outputName: String) {
  * 8) Если входной файл удовлетворяет требованиям 1-7, то он должен быть в точности идентичен выходному файлу
  */
 fun alignFileByWidth(inputName: String, outputName: String) {
-    TODO()
+    var maxLength = 0
+    for (line in File(inputName).readLines()) {
+        val wordsInLine = line.split(" ").filter { it.isNotEmpty() }.joinToString(" ")
+        if (wordsInLine.length > maxLength) maxLength = wordsInLine.length
+    }
+    val writer = File(outputName).bufferedWriter()
+    for (lines in File(inputName).readLines()) {
+        val words = lines.split(" ").filter { it.isNotEmpty() }
+        if (words.size > 1) {
+            val space = 1 + (maxLength - words.joinToString(" ").length) / (words.size - 1)
+            var whiteSpace = (maxLength - words.joinToString(" ").length) % (words.size - 1)
+            var line = ""
+            for (each in words)
+                if (whiteSpace != 0) {
+                    line += each + " ".repeat(space + 1)
+                    whiteSpace--
+                } else line += each + " ".repeat(space)
+            writer.write(line.trim())
+        } else writer.write(words.joinToString())
+        writer.newLine()
+    }
+    writer.close()
 }
 
 /**
