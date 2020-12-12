@@ -4,6 +4,7 @@ package lesson8.task2
 
 import kotlin.math.abs
 import kotlin.math.max
+import kotlin.math.sign
 
 /**
  * Клетка шахматной доски. Шахматная доска квадратная и имеет 8 х 8 клеток.
@@ -183,7 +184,19 @@ fun kingMoveNumber(start: Square, end: Square): Int {
  *          kingTrajectory(Square(3, 5), Square(6, 2)) = listOf(Square(3, 5), Square(4, 4), Square(5, 3), Square(6, 2))
  * Если возможно несколько вариантов самой быстрой траектории, вернуть любой из них.
  */
-fun kingTrajectory(start: Square, end: Square): List<Square> = TODO()
+fun kingTrajectory(start: Square, end: Square): List<Square> {
+    require(start.inside() && end.inside())
+    val ansMoves = mutableListOf<Square>()
+    ansMoves.add(start.copy())
+    var current = start.copy()
+    while (current != end) {
+        val dX = (end.row - current.row).sign
+        val dY = (end.column - current.column).sign
+        current = Square(current.column + dY, current.row + dX)
+        ansMoves.add(current.copy())
+    }
+    return ansMoves
+}
 
 /**
  * Сложная (6 баллов)

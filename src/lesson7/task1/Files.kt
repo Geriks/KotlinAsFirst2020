@@ -159,28 +159,49 @@ fun centerFile(inputName: String, outputName: String) {
  * 8) Если входной файл удовлетворяет требованиям 1-7, то он должен быть в точности идентичен выходному файлу
  */
 fun alignFileByWidth(inputName: String, outputName: String) {
-    var maxLength = 0
-    for (line in File(inputName).readLines()) {
-        val wordsInLine = line.split(" ").filter { it.isNotEmpty() }.joinToString(" ")
-        if (wordsInLine.length > maxLength) maxLength = wordsInLine.length
+    File(outputName).bufferedWriter().use {
+        val wordsInLine = mutableListOf<Int>()
+        val lengthOfLine = mutableListOf<Int>()
+        var counterOfWords: Int
+        var index = 0
+        var counterOfAddedSpaces: Int
+        val biggestLength: Int
+        var str: String
+        for (line in File(inputName).readLines()) {
+            wordsInLine.add(index, 0)
+            lengthOfLine.add(index, 0)
+            for (word in line.split(" ")) {
+                if (word.isEmpty()) continue
+                lengthOfLine[index] += word.length + 1
+                wordsInLine[index]++
+            }
+            if (lengthOfLine[index] > 0) lengthOfLine[index]--
+            index++
+        }
+        biggestLength = lengthOfLine.maxOrNull() ?: 0
+        index = 0
+        for (line in File(inputName).readLines()) {
+            str = line.trim()
+            counterOfAddedSpaces = 0
+            counterOfWords = 0
+            for (word in str.split(" ")) {
+                if (word.isEmpty()) continue
+                counterOfWords++
+                it.write(word)
+                if (counterOfWords < wordsInLine[index]) {
+                    it.write(" ")
+                    for (i in 1..(biggestLength - lengthOfLine[index]) / (wordsInLine[index] - 1))
+                        it.write(" ")
+                    if ((biggestLength - lengthOfLine[index]) % (wordsInLine[index] - 1) > counterOfAddedSpaces) {
+                        it.write(" ")
+                        counterOfAddedSpaces++
+                    }
+                }
+            }
+            it.newLine()
+            index++
+        }
     }
-    val writer = File(outputName).bufferedWriter()
-    for (lines in File(inputName).readLines()) {
-        val words = lines.split(" ").filter { it.isNotEmpty() }
-        if (words.size > 1) {
-            val space = 1 + (maxLength - words.joinToString(" ").length) / (words.size - 1)
-            var whiteSpace = (maxLength - words.joinToString(" ").length) % (words.size - 1)
-            var line = ""
-            for (each in words)
-                if (whiteSpace != 0) {
-                    line += each + " ".repeat(space + 1)
-                    whiteSpace--
-                } else line += each + " ".repeat(space)
-            writer.write(line.trim())
-        } else writer.write(words.joinToString())
-        writer.newLine()
-    }
-    writer.close()
 }
 
 /**

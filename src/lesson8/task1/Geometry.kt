@@ -5,6 +5,7 @@ package lesson8.task1
 import lesson1.task1.sqr
 import lesson4.task1.abs
 import lesson4.task1.center
+import lesson7.task1.markdownToHtml
 import kotlin.math.*
 
 // Урок 8: простые классы
