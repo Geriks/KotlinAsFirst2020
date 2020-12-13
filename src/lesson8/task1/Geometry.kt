@@ -3,9 +3,6 @@
 package lesson8.task1
 
 import lesson1.task1.sqr
-import lesson4.task1.abs
-import lesson4.task1.center
-import lesson7.task1.markdownToHtml
 import kotlin.math.*
 
 // Урок 8: простые классы
@@ -89,7 +86,7 @@ data class Circle(val center: Point, val radius: Double) {
      *
      * Вернуть true, если и только если окружность содержит данную точку НА себе или ВНУТРИ себя
      */
-    fun contains(p: Point): Boolean = TODO()
+    fun contains(p: Point): Boolean = center.distance(p) - radius <= 1e-6
 }
 
 /**
@@ -239,5 +236,29 @@ fun circleByThreePoints(a: Point, b: Point, c: Point): Circle {
  * три точки данного множества, либо иметь своим диаметром отрезок,
  * соединяющий две самые удалённые точки в данном множестве.
  */
-fun minContainingCircle(vararg points: Point): Circle = TODO()
+fun minContainingCircle(vararg points: Point): Circle {
+    if (points.isEmpty()) throw IllegalArgumentException()
+    if (points.size == 1) return Circle(points[0], 0.0)
+    var circle: Circle
+    var minCircle = Circle(Point(0.0, 0.0), -1.0)
+    var flag: Boolean
+    for (i in 0 until points.size - 2)
+        for (j in i + 1 until points.size - 1)
+            for (k in j + 1 until points.size) {
+                if (points[i] == points[j] || points[i] == points[k] || points[j] == points[k]) continue
+                if ((points[i].x == points[j].x && points[i].x == points[k].x)
+                    || (points[i].y == points[j].y && points[i].y == points[k].y)
+                ) continue
+                flag = true
+                circle = circleByThreePoints(points[i], points[j], points[k])
+                for (test in points.indices)
+                    if (!circle.contains(points[test])) flag = false
+                if (flag && (circle.radius < minCircle.radius || minCircle.radius == -1.0)) minCircle = circle
+            }
+    circle = circleByDiameter(diameter(*points))
+    flag = true
+    for (test in points.indices) if (!circle.contains(points[test])) flag = false
+    if (flag && (circle.radius < minCircle.radius || minCircle.radius == -1.0)) minCircle = circle
+    return minCircle
+}
 
