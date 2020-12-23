@@ -150,4 +150,66 @@ class Tests {
         assertThrows(IllegalArgumentException::class.java) { computeDeviceCells(10, "+>+>[+>", 3) }
         assertThrows(IllegalStateException::class.java) { computeDeviceCells(20, ">>>>>>>>>>>>>", 12) }
     }
+
+
+    @Test
+    @Tag("MyTest")
+    fun myPlans() {
+        assertEquals(
+            mapOf(
+                "вторник" to 1,
+                "пятница" to 2,
+                "суббота" to 1
+            ), myPlans(
+                listOf(
+                    "вторник лекции",
+                    "пятница друзья",
+                    "суббота кинотеатр",
+                    "пятница уборка"
+                )
+            )
+        )
+        assertEquals(
+            mapOf(
+                "вторник" to 4
+            ), myPlans(
+                listOf(
+                    "вторник лекции",
+                    "вторник друзья",
+                    "вторник кинотеатр",
+                    "вторник уборка"
+                )
+            )
+        )
+        assertThrows(IllegalArgumentException::class.java) {
+            myPlans(
+                listOf(
+                    "лекции лекции",
+                    "друзья друзья",
+                    "кинотеатр кинотеатр",
+                    "пятница уборка"
+                )
+            )
+            assertThrows(IllegalArgumentException::class.java) {
+                myPlans(
+                    listOf(
+                        "1 2",
+                        "1 3",
+                        "1 2",
+                        "1 2 3 4"
+                    )
+                )
+                assertThrows(IllegalArgumentException::class.java) {
+                    myPlans(
+                        listOf(
+                            "вторник",
+                            "вторник ",
+                            "вторник",
+                            "вторник "
+                        )
+                    )
+                }
+            }
+        }
+    }
 }

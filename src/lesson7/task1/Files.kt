@@ -2,7 +2,7 @@
 
 package lesson7.task1
 
-import lesson2.task1.whichRookThreatens
+import lesson4.task1.convertToString
 import java.io.File
 import kotlin.math.max
 
@@ -521,3 +521,42 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
     TODO()
 }
 
+
+/**
+Дан текстовый файл, в котором схематично изображена схема прямоугольного мини-лабиринта:
+- во всех строках одинаковое количество символов
+- символ # обозначает препятствие, символ . свободное место и символ * начальное местоположение "Робота"
+
+Функция, которую нужно написать, принимает как параметры имя этого файла и строку с командами для робота вида "rllluddurld",
+где r обозначает движение вправо, l влево, u вверх и d вниз, другие команды запрещены.
+должна вернуть координаты той клетки лабиринта, на которой робот окажется после выполнения команд.
+Если очередная команда требует от робота наступить на препятствие или выйти за границы лабиринта,
+робот просто остаётся на месте и переходит к следующей команде. */
+
+fun robotInMaze(inputName: String, commands: String): Pair<Int, Int> {
+    var cords = Pair(0, 0)
+    val list = mutableListOf<Pair<Int, Int>>()
+    val lines = File(inputName).readLines().size
+    val maxSignInLine = File(inputName).readLines()[0].length
+    for ((y, str) in File(inputName).readLines().withIndex()) {
+        if ('*' in str)
+            cords = str.indexOf('*') to y
+        if ('#' in str)
+            for (x in str.indices)
+                if (str[x] == '#')
+                    list.add(x to y)
+    }
+    for (cmd in commands) {
+        when (cmd) {
+            'r' -> if (cords.first + 1 <= maxSignInLine && (cords.first + 1 to cords.second) !in list)
+                cords = cords.first + 1 to cords.second
+            'l' -> if (cords.first - 1 >= 0 && (cords.first - 1 to cords.second) !in list)
+                cords = cords.first - 1 to cords.second
+            'u' -> if (cords.second - 1 >= lines && (cords.first to cords.second - 1) !in list)
+                cords = cords.first to cords.second - 1
+            'd' -> if (cords.second + 1 <= lines && (cords.first to cords.second + 1) !in list)
+                cords = cords.first to cords.second + 1
+        }
+    }
+    return cords
+}

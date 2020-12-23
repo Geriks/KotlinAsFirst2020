@@ -441,4 +441,11 @@ Basic, Ruby, Swift.
 
         File("temp.txt").delete()
     }
+
+    @Test
+    fun robotInMaze() {
+        assertEquals(Pair(1, 2), (robotInMaze("input/Maze1","rrrrllllddddr")))
+        assertEquals(Pair(1, 4), (robotInMaze("input/Maze2","rudldrlrld")))
+        assertEquals(Pair(1, 1), (robotInMaze("input/Maze3)","rlduudlr")))
+    }
 }
