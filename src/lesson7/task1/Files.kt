@@ -2,7 +2,6 @@
 
 package lesson7.task1
 
-import lesson4.task1.convertToString
 import java.io.File
 import kotlin.math.max
 
@@ -535,16 +534,18 @@ fun printDivisionProcess(lhv: Int, rhv: Int, outputName: String) {
 
 fun robotInMaze(inputName: String, commands: String): Pair<Int, Int> {
     var cords = Pair(0, 0)
-    val list = mutableListOf<Pair<Int, Int>>()
-    val lines = File(inputName).readLines().size
-    val maxSignInLine = File(inputName).readLines()[0].length
-    for ((y, str) in File(inputName).readLines().withIndex()) {
-        if ('*' in str)
-            cords = str.indexOf('*') to y
+    val list = mutableSetOf<Pair<Int, Int>>()
+    val inputFile = File(inputName).readLines()
+    val lines = inputFile.size
+    val maxSignInLine = inputFile[0].length
+    for ((y, str) in inputFile.withIndex()) {
+        val star = str.indexOf('*')
+        if (star != -1)
+            cords = star to y
         if ('#' in str)
-            for (x in str.indices)
-                if (str[x] == '#')
-                    list.add(x to y)
+            for ((index, element) in str.withIndex())
+                if (element == '#')
+                    list.add(index to y)
     }
     for (cmd in commands) {
         when (cmd) {
