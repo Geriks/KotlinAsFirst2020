@@ -4,7 +4,7 @@ package lesson11.task1
 
 import kotlin.math.pow
 
-val rx = Regex("""(([+\-])*[\d.]*)""")  // "(([+\\-])*([\\d.])*)"
+val rx = Regex("""(([+\-])?[\d]*\.?\d*)""")
 
 /**
  * Класс "комплексное число".
@@ -25,9 +25,17 @@ class Complex(val re: Double, val im: Double) {
     /**
      * Конструктор из строки вида x+yi
      */
+    companion object {
+        fun correctString(s: String): Pair<Double, Double> {
+            if (s == "") return 0.0 to 0.0
+            if (s.matches(Regex(""" ?\d*.?\d[+-]\d*.?\di""")))
+                return rx.findAll(s).elementAt(0).value.toDouble() to rx.findAll(s).elementAt(1).value.toDouble()
+            throw IllegalArgumentException()
+        }
+    }
+
     constructor(s: String) : this(
-        rx.findAll(s).elementAt(0).value.toDouble(),
-        rx.findAll(s).elementAt(1).value.toDouble()
+        correctString(s).first, correctString(s).second
     )
 
     /**
@@ -65,16 +73,19 @@ class Complex(val re: Double, val im: Double) {
     /**
      * Сравнение на равенство
      */
-    override fun equals(other: Any?): Boolean = other is Complex && this.re == other.re && this.im == other.im
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is Complex) return false
+        return re == other.re && im == other.im
+    }
 
     /**
      * Преобразование в строку
      */
     override fun toString(): String = when {
-        this.im == 0.0 && re == 0.0 -> "0.0"
         this.im < 0 -> "$re${im}i"
         this.im > 0 -> "$re+${im}i"
-        else -> "re"
+        else -> "$re"
     }
 
     override fun hashCode(): Int {

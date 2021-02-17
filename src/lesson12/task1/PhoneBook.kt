@@ -20,17 +20,14 @@ package lesson12.task1
 class PhoneBook {
     val directory = mutableMapOf<String, MutableSet<String>>()
 
+
     /**
      * Добавить человека.
      * Возвращает true, если человек был успешно добавлен,
      * и false, если человек с таким именем уже был в телефонной книге
      * (во втором случае телефонная книга не должна меняться).
      */
-    fun addHuman(name: String): Boolean {
-        if (directory.containsKey(name)) return false
-        directory[name] = mutableSetOf()
-        return true
-    }
+    fun addHuman(name: String): Boolean = directory.putIfAbsent(name, mutableSetOf()) == null
 
     /**
      * Убрать человека.
@@ -38,11 +35,7 @@ class PhoneBook {
      * и false, если человек с таким именем отсутствовал в телефонной книге
      * (во втором случае телефонная книга не должна меняться).
      */
-    fun removeHuman(name: String): Boolean {
-        if (!directory.containsKey(name)) return false
-        directory.remove(name)
-        return true
-    }
+    fun removeHuman(name: String): Boolean = directory.remove(name) != null
 
     /**
      * Добавить номер телефона.
@@ -52,13 +45,7 @@ class PhoneBook {
      * либо такой номер телефона зарегистрирован за другим человеком.
      */
     fun addPhone(name: String, phone: String): Boolean {
-        var existence = false
-        if (!directory.containsKey(name)) return false
-        for ((key, numbers) in directory) {
-            if (numbers.contains(phone)) return false
-            if (key == name) existence = true
-        }
-        if (!existence) return false
+        if (!directory.containsKey(name) || humanByPhone(phone) != null) return false
         directory[name]?.add(phone)
         return true
     }
@@ -69,11 +56,8 @@ class PhoneBook {
      * и false, если человек с таким именем отсутствовал в телефонной книге
      * либо у него не было такого номера телефона.
      */
-    fun removePhone(name: String, phone: String): Boolean {
-        if (name !in directory || !directory[name]?.contains(phone)!!) return false
-        directory[name]?.remove(phone)
-        return true
-    }
+    fun removePhone(name: String, phone: String): Boolean =
+        directory.containsKey(name) && directory[name]?.remove(phone)!!
 
     /**
      * Вернуть все номера телефона заданного человека.
