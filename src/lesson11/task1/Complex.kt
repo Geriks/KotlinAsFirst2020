@@ -28,7 +28,7 @@ class Complex(val re: Double, val im: Double) {
     companion object {
         fun correctString(s: String): Pair<Double, Double> {
             if (s == "") return 0.0 to 0.0
-            if (s.matches(Regex(""" ?\d*.?\d[+-]\d*.?\di""")))
+            if (s.matches(Regex("""-?\d*.?\d[+-]\d*.?\d*i""")))
                 return rx.findAll(s).elementAt(0).value.toDouble() to rx.findAll(s).elementAt(1).value.toDouble()
             throw IllegalArgumentException()
         }

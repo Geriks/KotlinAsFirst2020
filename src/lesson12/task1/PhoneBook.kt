@@ -20,7 +20,6 @@ package lesson12.task1
 class PhoneBook {
     val directory = mutableMapOf<String, MutableSet<String>>()
 
-
     /**
      * Добавить человека.
      * Возвращает true, если человек был успешно добавлен,
@@ -45,7 +44,8 @@ class PhoneBook {
      * либо такой номер телефона зарегистрирован за другим человеком.
      */
     fun addPhone(name: String, phone: String): Boolean {
-        if (!directory.containsKey(name) || humanByPhone(phone) != null) return false
+        val dirName = directory[name]
+        if (dirName == null || humanByPhone(phone) != null) return false
         directory[name]?.add(phone)
         return true
     }
@@ -57,7 +57,7 @@ class PhoneBook {
      * либо у него не было такого номера телефона.
      */
     fun removePhone(name: String, phone: String): Boolean =
-        directory.containsKey(name) && directory[name]?.remove(phone)!!
+        directory[name] != null && directory[name]?.remove(phone)!!
 
     /**
      * Вернуть все номера телефона заданного человека.
