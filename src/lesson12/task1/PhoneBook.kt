@@ -29,7 +29,7 @@ class PhoneBook {
     fun addHuman(name: String): Boolean = directory.putIfAbsent(name, mutableSetOf()) == null
 
     /**
-     * Убрать человека.
+     *   Убрать человека.
      * Возвращает true, если человек был успешно удалён,
      * и false, если человек с таким именем отсутствовал в телефонной книге
      * (во втором случае телефонная книга не должна меняться).
@@ -46,7 +46,7 @@ class PhoneBook {
     fun addPhone(name: String, phone: String): Boolean {
         val dirName = directory[name]
         if (dirName == null || humanByPhone(phone) != null) return false
-        directory[name]?.add(phone)
+        dirName.add(phone)
         return true
     }
 
@@ -57,7 +57,7 @@ class PhoneBook {
      * либо у него не было такого номера телефона.
      */
     fun removePhone(name: String, phone: String): Boolean =
-        directory[name] != null && directory[name]?.remove(phone)!!
+        directory[name]?.remove(phone) ?: false
 
     /**
      * Вернуть все номера телефона заданного человека.

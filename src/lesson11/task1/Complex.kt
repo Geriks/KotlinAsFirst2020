@@ -4,7 +4,7 @@ package lesson11.task1
 
 import kotlin.math.pow
 
-val rx = Regex("""(([+\-])?[\d]*\.?\d*)""")
+val rx = Regex("""(-?\d+(\.\d+)?)([+-]\d+(\.\d+)?)i""")
 
 /**
  * Класс "комплексное число".
@@ -28,9 +28,8 @@ class Complex(val re: Double, val im: Double) {
     companion object {
         fun correctString(s: String): Pair<Double, Double> {
             if (s == "") return 0.0 to 0.0
-            if (s.matches(Regex("""-?\d*.?\d[+-]\d*.?\d*i""")))
-                return rx.findAll(s).elementAt(0).value.toDouble() to rx.findAll(s).elementAt(1).value.toDouble()
-            throw IllegalArgumentException()
+            val ans = rx.matchEntire(s) ?: throw IllegalArgumentException()
+            return ans.groupValues[1].toDouble() to ans.groupValues[3].toDouble()
         }
     }
 
